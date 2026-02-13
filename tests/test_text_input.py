@@ -1,20 +1,38 @@
-import time
-from playwright.sync_api import expect
+
+def test1(driver):
+    driver.goto("/elements/input/simple")
+    input_field = driver.locator("//input[@name='text_string']")
+    result_area = driver.locator("//div[@class='result']")
+    text = "12345"
+    input_field.fill(text)
+    input_field.press('Enter')
+    assert text in result_area.all_text_contents()[0]
 
 
-def test_empty_field(text_input_page):
-    text_input_page.open()
-    text_input_page.click_input_field()
-    text_input_page.press_enter()
-    assert text_input_page.evaluate_empty_field_submit() == 'Please fill out this field.'
+def test2(driver_saucedemo):
+    driver_saucedemo.goto("")
+    user_name = "//input[@id='user-name']"
+    password = "//input[@id='password']"
+    login_button = "//input[@id='login-button']"
+
+    driver_saucedemo.locator(user_name).fill('standard_user')
+    driver_saucedemo.locator(password).fill('secret_sauce')
+    driver_saucedemo.locator(login_button).click()
 
 
-def test_typing_text_field(text_input_page):
-    text_input_page.open()
-    text_input_page.click_input_field()
-    text_input_page.typing_in_a_input_field('Timofei')
-    text_input_page.press_enter()
-    time.sleep(5)
+def test_radio_button_yes(driver_demoqa):
+    driver_demoqa.goto(
+        url="radio-button",
+        wait_until="domcontentloaded"
+    )
+    radio_button_yes = "label[for='yesRadio']"
+    text_status = "span[class='text-success']"
+
+    driver_demoqa.locator(radio_button_yes).check()
+    text = driver_demoqa.locator(text_status).text_content()
+
+    assert text == "Yes"
+
 
 
 
